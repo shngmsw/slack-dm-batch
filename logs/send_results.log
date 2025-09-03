@@ -1,0 +1,11 @@
+2025-09-03 06:41:26,488 - send_results - INFO - main.py:251 - Starting send job 4f40fa39-d845-4532-9e82-6ebacb81d025 for 1 users
+2025-09-03 06:41:34,336 - send_results - ERROR - main.py:278 - Failed to send DM to Ishii.ひじきぼーい (UAP4MLW8J): Failed after 4 attempts: Slack API error: missing_scope
+2025-09-03 06:41:34,338 - send_results - INFO - main.py:295 - Completed send job 4f40fa39-d845-4532-9e82-6ebacb81d025: 0 sent, 1 failed
+2025-09-03 06:53:20,984 - send_results - INFO - main.py:251 - Starting send job bbdff193-18dc-4dd3-b28d-6aed2e18fba2 for 2 users
+2025-09-03 06:53:28,821 - send_results - ERROR - main.py:278 - Failed to send DM to Ishii.ひじきぼーい (UAP4MLW8J): Failed after 4 attempts: Slack API error: missing_scope
+2025-09-03 06:53:37,489 - send_results - ERROR - main.py:278 - Failed to send DM to Misawa.もせ (U011Q5G7685): Failed after 4 attempts: Slack API error: missing_scope
+2025-09-03 06:53:37,490 - send_results - INFO - main.py:295 - Completed send job bbdff193-18dc-4dd3-b28d-6aed2e18fba2: 0 sent, 2 failed
+2025-09-03 06:56:46,385 - send_results - INFO - main.py:251 - Starting send job 22d86c12-a099-46d9-956a-8786a85630a3 for 2 users
+2025-09-03 06:56:46,957 - send_results - INFO - main.py:273 - Successfully sent DM to Ishii.ひじきぼーい (UAP4MLW8J)
+2025-09-03 06:56:48,284 - send_results - INFO - main.py:273 - Successfully sent DM to Misawa.もせ (U011Q5G7685)
+2025-09-03 06:56:48,284 - send_results - INFO - main.py:295 - Completed send job 22d86c12-a099-46d9-956a-8786a85630a3: 2 sent, 0 failed

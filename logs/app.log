@@ -1,0 +1,45 @@
+2025-09-03 06:37:48,286 - app.main - INFO - main.py:89 - Extracted mentions: ['test']
+2025-09-03 06:38:04,669 - app.main - INFO - main.py:89 - Extracted mentions: ['Misawa.もせ']
+2025-09-03 06:38:04,870 - app.slack_client - ERROR - slack_client.py:83 - Failed to get user by name Misawa.もせ: ratelimited
+2025-09-03 06:38:23,366 - app.main - INFO - main.py:89 - Extracted mentions: ['Mise.JizeR', 'Misawa.もせ']
+2025-09-03 06:38:43,501 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい', 'Misawa.もせ']
+2025-09-03 06:38:43,704 - app.slack_client - ERROR - slack_client.py:83 - Failed to get user by name Ishii.ひじきぼーい: ratelimited
+2025-09-03 06:38:47,390 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい', 'Misawa.もせ']
+2025-09-03 06:38:47,595 - app.slack_client - ERROR - slack_client.py:83 - Failed to get user by name Ishii.ひじきぼーい: ratelimited
+2025-09-03 06:38:48,580 - app.slack_client - ERROR - slack_client.py:83 - Failed to get user by name Misawa.もせ: ratelimited
+2025-09-03 06:39:04,129 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい']
+2025-09-03 06:40:38,960 - app.main - INFO - main.py:89 - Extracted mentions: ['test']
+2025-09-03 06:40:45,016 - app.main - INFO - main.py:89 - Extracted mentions: ['test']
+2025-09-03 06:40:48,611 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい']
+2025-09-03 06:40:48,820 - app.slack_client - ERROR - slack_client.py:83 - Failed to get user by name Ishii.ひじきぼーい: ratelimited
+2025-09-03 06:40:52,307 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい']
+2025-09-03 06:41:26,486 - app.main - INFO - main.py:218 - Started send job 4f40fa39-d845-4532-9e82-6ebacb81d025 for 1 users
+2025-09-03 06:41:26,713 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:41:26,713 - app.slack_client - WARNING - slack_client.py:157 - Attempt 1 failed for UAP4MLW8J: Slack API error: missing_scope. Retrying in 1.0s...
+2025-09-03 06:41:27,923 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:41:27,924 - app.slack_client - WARNING - slack_client.py:157 - Attempt 2 failed for UAP4MLW8J: Slack API error: missing_scope. Retrying in 2.0s...
+2025-09-03 06:41:30,117 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:41:30,117 - app.slack_client - WARNING - slack_client.py:157 - Attempt 3 failed for UAP4MLW8J: Slack API error: missing_scope. Retrying in 4.0s...
+2025-09-03 06:41:34,335 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:41:34,336 - app.slack_client - ERROR - slack_client.py:160 - All 4 attempts failed for UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:52:28,539 - app.main - INFO - main.py:89 - Extracted mentions: ['test']
+2025-09-03 06:52:34,949 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい']
+2025-09-03 06:52:40,949 - app.main - INFO - main.py:89 - Extracted mentions: ['Ishii.ひじきぼーい', 'Misawa.もせ']
+2025-09-03 06:53:20,979 - app.main - INFO - main.py:218 - Started send job bbdff193-18dc-4dd3-b28d-6aed2e18fba2 for 2 users
+2025-09-03 06:53:21,192 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:53:21,193 - app.slack_client - WARNING - slack_client.py:157 - Attempt 1 failed for UAP4MLW8J: Slack API error: missing_scope. Retrying in 1.0s...
+2025-09-03 06:53:22,397 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:53:22,397 - app.slack_client - WARNING - slack_client.py:157 - Attempt 2 failed for UAP4MLW8J: Slack API error: missing_scope. Retrying in 2.0s...
+2025-09-03 06:53:24,607 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:53:24,607 - app.slack_client - WARNING - slack_client.py:157 - Attempt 3 failed for UAP4MLW8J: Slack API error: missing_scope. Retrying in 4.0s...
+2025-09-03 06:53:28,819 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:53:28,820 - app.slack_client - ERROR - slack_client.py:160 - All 4 attempts failed for UAP4MLW8J: Slack API error: missing_scope
+2025-09-03 06:53:29,815 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to U011Q5G7685: Slack API error: missing_scope
+2025-09-03 06:53:29,816 - app.slack_client - WARNING - slack_client.py:157 - Attempt 1 failed for U011Q5G7685: Slack API error: missing_scope. Retrying in 1.0s...
+2025-09-03 06:53:31,041 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to U011Q5G7685: Slack API error: missing_scope
+2025-09-03 06:53:31,042 - app.slack_client - WARNING - slack_client.py:157 - Attempt 2 failed for U011Q5G7685: Slack API error: missing_scope. Retrying in 2.0s...
+2025-09-03 06:53:33,267 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to U011Q5G7685: Slack API error: missing_scope
+2025-09-03 06:53:33,267 - app.slack_client - WARNING - slack_client.py:157 - Attempt 3 failed for U011Q5G7685: Slack API error: missing_scope. Retrying in 4.0s...
+2025-09-03 06:53:37,487 - app.slack_client - ERROR - slack_client.py:124 - Failed to send DM to U011Q5G7685: Slack API error: missing_scope
+2025-09-03 06:53:37,489 - app.slack_client - ERROR - slack_client.py:160 - All 4 attempts failed for U011Q5G7685: Slack API error: missing_scope
+2025-09-03 06:56:46,377 - app.main - INFO - main.py:218 - Started send job 22d86c12-a099-46d9-956a-8786a85630a3 for 2 users

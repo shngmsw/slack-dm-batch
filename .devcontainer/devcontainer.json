@@ -1,0 +1,25 @@
+{
+  "name": "Claude Python DevContainer",
+  "image": "mcr.microsoft.com/devcontainers/python:latest",
+  "features": {
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "latest"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "lts"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "python.defaultInterpreterPath": "/usr/local/bin/python"
+      },
+      "extensions": [
+        "ms-python.python",
+        "ms-toolsai.jupyter"
+      ]
+    }
+  },
+  "postCreateCommand": "pip install --upgrade pip && npm install -g @anthropic-ai/claude-code",
+  "remoteUser": "vscode"
+}

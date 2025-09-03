@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slack DM Batch Sender</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Slack DM Batch Sender</h1>
+            <p>複数のユーザーに一括でDMを送信</p>
+        </header>
+
+        <main>
+            <!-- Step 1: 認証設定 -->
+            <section id="step-1" class="step active">
+                <h2>Step 1: Slack認証</h2>
+                <div class="form-group">
+                    <label for="slack-token">Slack User Token (xoxp-...)</label>
+                    <input type="password" id="slack-token" placeholder="xoxp-your-token-here" required>
+                    <button type="button" id="validate-token">トークン検証</button>
+                    <div class="help-text">
+                        <details>
+                            <summary>Slackトークンの取得方法</summary>
+                            <ol>
+                                <li><a href="https://api.slack.com/apps" target="_blank">Slack Apps</a> でアプリを作成</li>
+                                <li>「OAuth & Permissions」で以下のスコープを追加:
+                                    <ul>
+                                        <li><code>chat:write</code> - メッセージ送信</li>
+                                        <li><code>users:read</code> - ユーザー情報取得</li>
+                                        <li><code>im:write</code> - DM送信</li>
+                                    </ul>
+                                </li>
+                                <li>ワークスペースにインストール</li>
+                                <li>User OAuth Token (xoxp-) をコピー</li>
+                            </ol>
+                        </details>
+                    </div>
+                </div>
+                <div id="token-status" class="status"></div>
+                <div class="step-navigation clearfix">
+                    <button type="button" id="next-step-1" class="next-btn" disabled>次へ</button>
+                </div>
+            </section>
+
+            <!-- Step 2: 送信対象設定 -->
+            <section id="step-2" class="step">
+                <h2>Step 2: 送信対象設定</h2>
+                
+                <div class="tabs">
+                    <button type="button" class="tab-btn active" data-tab="mentions">メンション貼り付け</button>
+                    <button type="button" class="tab-btn" data-tab="file">ファイル</button>
+                    <button type="button" class="tab-btn" data-tab="manual">手動入力</button>
+                </div>
+
+                <div id="mentions-tab" class="tab-content active">
+                    <div class="form-group">
+                        <label for="mentions-input">Slackからコピーしたメンション</label>
+                        <textarea id="mentions-input" placeholder="@Misawa.もせ @田中太郎 @john.doe" rows="4"></textarea>
+                        <button type="button" id="parse-mentions">解析</button>
+                    </div>
+                </div>
+
+                <div id="file-tab" class="tab-content">
+                    <div class="form-group">
+                        <label for="file-upload">CSVまたはJSONファイル</label>
+                        <input type="file" id="file-upload" accept=".csv,.json">
+                        <div id="file-drop-zone" class="drop-zone">
+                            ファイルをドラッグ&ドロップ
+                        </div>
+                    </div>
+                </div>
+
+                <div id="manual-tab" class="tab-content">
+                    <div class="form-group">
+                        <button type="button" id="add-user">ユーザー追加</button>
+                        <div id="manual-users" class="user-list"></div>
+                    </div>
+                </div>
+
+                <div id="users-preview" class="users-preview">
+                    <h3>送信対象ユーザー</h3>
+                    <div id="users-list"></div>
+                </div>
+
+                <div class="step-navigation clearfix">
+                    <button type="button" id="prev-step-2" class="prev-btn">← Step 1に戻る</button>
+                    <button type="button" id="next-step-2" class="next-btn" disabled>次へ</button>
+                </div>
+            </section>
+
+            <!-- Step 3: メッセージ作成 -->
+            <section id="step-3" class="step">
+                <h2>Step 3: メッセージ作成</h2>
+                
+                <div class="form-group">
+                    <label for="message-template">メッセージテンプレート</label>
+                    <textarea id="message-template" placeholder="こんにちは {name} さん、{company} の件でご連絡です。" rows="6"></textarea>
+                    <div class="help-text">
+                        {name}, {company} などの変数を使用できます
+                    </div>
+                </div>
+
+                <div id="template-info">
+                    <div id="variables-detected"></div>
+                    <div id="template-errors"></div>
+                </div>
+
+                <div id="preview-area">
+                    <h3>プレビュー</h3>
+                    <div id="message-preview"></div>
+                </div>
+
+                <div class="step-navigation clearfix">
+                    <button type="button" id="prev-step-3" class="prev-btn">← Step 2に戻る</button>
+                    <button type="button" id="next-step-3" class="next-btn" disabled>次へ</button>
+                </div>
+            </section>
+
+            <!-- Step 4: 変数設定 -->
+            <section id="step-4" class="step">
+                <h2>Step 4: 変数設定</h2>
+                
+                <div id="variables-section" style="display: none;">
+                    <div class="form-group">
+                        <button type="button" id="import-variables">CSV変数データをインポート</button>
+                        <input type="file" id="variables-file" accept=".csv" style="display: none;">
+                    </div>
+
+                    <div id="user-variables">
+                        <!-- 動的に生成される -->
+                    </div>
+                </div>
+
+                <div id="no-variables" style="display: none;">
+                    <p>テンプレートに変数が含まれていません。</p>
+                </div>
+
+                <div class="step-navigation clearfix">
+                    <button type="button" id="prev-step-4" class="prev-btn">← Step 3に戻る</button>
+                    <button type="button" id="next-step-4" class="next-btn">次へ</button>
+                </div>
+            </section>
+
+            <!-- Step 5: 送信実行 -->
+            <section id="step-5" class="step">
+                <h2>Step 5: 送信実行</h2>
+                
+                <div id="final-preview">
+                    <h3>最終確認</h3>
+                    <div id="send-summary"></div>
+                    <div id="final-message-preview"></div>
+                </div>
+
+                <div class="step-navigation clearfix">
+                    <button type="button" id="prev-step-5" class="prev-btn">← Step 4に戻る</button>
+                    <button type="button" id="start-send" class="send-btn">送信開始</button>
+                    <button type="button" id="retry-send" class="retry-btn" style="display: none;">送信を再実行</button>
+                    <button type="button" id="reset-app" class="reset-btn" style="display: none;">最初からやり直し</button>
+                </div>
+
+                <div id="send-progress" style="display: none;">
+                    <h3>送信進捗</h3>
+                    <div class="progress-bar">
+                        <div id="progress-fill" class="progress-fill"></div>
+                    </div>
+                    <div id="progress-text"></div>
+                </div>
+
+                <div id="send-results" style="display: none;">
+                    <h3>送信結果</h3>
+                    <div id="results-summary"></div>
+                    <div id="results-details"></div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- エラー/成功メッセージ表示用 -->
+    <div id="notification" class="notification"></div>
+
+    <!-- ローディングスピナー -->
+    <div id="loading" class="loading" style="display: none;">
+        <div class="spinner"></div>
+    </div>
+
+    <script src="/static/js/app.js"></script>
+</body>
+</html>
