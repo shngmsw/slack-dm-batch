@@ -13,6 +13,9 @@ class SlackClient:
         self.token = token
         self.client = AsyncWebClient(token=token)
         self.last_request_time = 0
+        self._users_cache = None
+        self._cache_timestamp = 0
+        self._cache_duration = 300  # 5分でキャッシュを無効化
         
     async def validate_token(self) -> bool:
         """トークンの有効性を検証"""
@@ -48,43 +51,60 @@ class SlackClient:
             logger.error(f"Error getting user info for {user_id}: {str(e)}")
             return None
     
-    async def get_user_by_name(self, display_name: str) -> Optional[Dict[str, Any]]:
-        """表示名からユーザー情報を取得（全ユーザーリストから検索）"""
+    async def _get_users_list(self) -> List[Dict[str, Any]]:
+        """ユーザーリストを取得（キャッシュ付き）"""
+        current_time = time.time()
+        
+        # キャッシュが有効な場合はそれを返す
+        if (self._users_cache is not None and 
+            current_time - self._cache_timestamp < self._cache_duration):
+            return self._users_cache
+        
         try:
             await self._rate_limit()
             response = await self.client.users_list()
             if response["ok"]:
-                for user in response["members"]:
-                    if user.get("deleted"):
-                        continue
-                    
-                    # 複数の名前パターンをチェック
-                    names_to_check = [
-                        user["name"],
-                        user.get("real_name", ""),
-                        user.get("profile", {}).get("display_name", ""),
-                        user.get("profile", {}).get("real_name", "")
-                    ]
-                    
-                    # @を除去した表示名でも比較
-                    clean_display_name = display_name.lstrip("@")
-                    
-                    for name in names_to_check:
-                        if name and (name == display_name or name == clean_display_name):
-                            return {
-                                "id": user["id"],
-                                "name": user["name"],
-                                "display_name": user.get("profile", {}).get("display_name") or user.get("real_name") or user["name"],
-                                "real_name": user.get("real_name"),
-                                "email": user.get("profile", {}).get("email")
-                            }
-            return None
+                self._users_cache = response["members"]
+                self._cache_timestamp = current_time
+                logger.info(f"Updated users cache with {len(self._users_cache)} users")
+                return self._users_cache
+            return []
         except SlackApiError as e:
-            logger.error(f"Failed to get user by name {display_name}: {e.response['error']}")
-            return None
+            logger.error(f"Failed to get users list: {e.response['error']}")
+            return []
         except Exception as e:
-            logger.error(f"Error getting user by name {display_name}: {str(e)}")
-            return None
+            logger.error(f"Error getting users list: {str(e)}")
+            return []
+
+    async def get_user_by_name(self, display_name: str) -> Optional[Dict[str, Any]]:
+        """表示名からユーザー情報を取得（キャッシュされたユーザーリストから検索）"""
+        users = await self._get_users_list()
+        
+        for user in users:
+            if user.get("deleted"):
+                continue
+            
+            # 複数の名前パターンをチェック
+            names_to_check = [
+                user["name"],
+                user.get("real_name", ""),
+                user.get("profile", {}).get("display_name", ""),
+                user.get("profile", {}).get("real_name", "")
+            ]
+            
+            # @を除去した表示名でも比較
+            clean_display_name = display_name.lstrip("@")
+            
+            for name in names_to_check:
+                if name and (name == display_name or name == clean_display_name):
+                    return {
+                        "id": user["id"],
+                        "name": user["name"],
+                        "display_name": user.get("profile", {}).get("display_name") or user.get("real_name") or user["name"],
+                        "real_name": user.get("real_name"),
+                        "email": user.get("profile", {}).get("email")
+                    }
+        return None
     
     async def send_dm(self, user_id: str, message: str) -> Dict[str, Any]:
         """ユーザーにDMを送信"""
@@ -212,19 +232,48 @@ class SlackClient:
         self.last_request_time = time.time()
     
     async def resolve_users_from_mentions(self, mentions: List[str]) -> tuple[List[Dict[str, Any]], List[str]]:
-        """メンションリストからユーザー情報を解決"""
+        """メンションリストからユーザー情報を解決（効率化版）"""
         users = []
         errors = []
+        
+        # 一度だけユーザーリストを取得
+        all_users = await self._get_users_list()
         
         for mention in mentions:
             clean_mention = mention.strip().lstrip("@")
             if not clean_mention:
                 continue
-                
-            user_info = await self.get_user_by_name(clean_mention)
+            
+            # キャッシュされたリストから検索（API呼び出し不要）
+            user_info = self._find_user_in_list(all_users, clean_mention)
             if user_info:
                 users.append(user_info)
             else:
                 errors.append(f"User not found: {mention}")
         
         return users, errors
+    
+    def _find_user_in_list(self, users: List[Dict[str, Any]], display_name: str) -> Optional[Dict[str, Any]]:
+        """ユーザーリストから指定した名前のユーザーを検索"""
+        for user in users:
+            if user.get("deleted"):
+                continue
+            
+            # 複数の名前パターンをチェック
+            names_to_check = [
+                user["name"],
+                user.get("real_name", ""),
+                user.get("profile", {}).get("display_name", ""),
+                user.get("profile", {}).get("real_name", "")
+            ]
+            
+            for name in names_to_check:
+                if name and name == display_name:
+                    return {
+                        "id": user["id"],
+                        "name": user["name"],
+                        "display_name": user.get("profile", {}).get("display_name") or user.get("real_name") or user["name"],
+                        "real_name": user.get("real_name"),
+                        "email": user.get("profile", {}).get("email")
+                    }
+        return None
