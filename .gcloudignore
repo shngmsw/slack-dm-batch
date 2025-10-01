@@ -1,0 +1,84 @@
+# This file specifies files that are *not* uploaded to Google Cloud Platform
+# using gcloud. It follows the same syntax as .gitignore, with the addition of
+# "#!include" directives (which insert the entries of the given .gitignore-style
+# file at that point).
+#
+# For more information, run:
+#   $ gcloud topic gcloudignore
+#
+.gcloudignore
+# If you would like to upload your .git directory, .gitignore file or files
+# from your .gitignore file, remove the corresponding line
+# below:
+.git
+.gitignore
+
+# Python pycache:
+__pycache__/
+*.py[cod]
+*$py.class
+
+# C extensions
+*.so
+
+# Virtual environment
+venv/
+ENV/
+env/
+.venv/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Testing
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.hypothesis/
+*.cover
+*.log
+
+# Documentation
+docs/
+*.md
+!README.md
+!DEPLOY.md
+
+# Development files
+*.env.local
+*.env.development
+*.env.test
+.env.example
+
+# GitHub workflows
+.github/
+
+# Claude workflow files
+.claude/
+.claude_workflow/
+CLAUDE.md
+
+# Deploy script (not needed in cloud)
+deploy.sh
+
+# Docker compose files (for local dev)
+docker-compose*.yml
+
+# Backup files
+*.backup
+*.bak
+*.tmp
+
+# Package manager lock files (we want fresh installs)
+package-lock.json
+yarn.lock
+pnpm-lock.yaml

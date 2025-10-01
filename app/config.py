@@ -9,7 +9,7 @@ class Settings:
     APP_NAME: str = "Slack DM Batch Sender"
     DEBUG: bool = os.getenv("DEBUG", "False").lower() == "true"
     HOST: str = os.getenv("HOST", "0.0.0.0")
-    PORT: int = int(os.getenv("PORT", "8000"))
+    PORT: int = int(os.getenv("PORT", "8080"))
     
     # Slack API settings
     SLACK_TOKEN: Optional[str] = os.getenv("SLACK_TOKEN")

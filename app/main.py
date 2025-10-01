@@ -55,6 +55,11 @@ jobs: Dict[str, SendResult] = {}
 message_processor = MessageProcessor()
 user_parser = UserParser()
 
+@app.get("/health")
+async def health_check():
+    """ヘルスチェックエンドポイント（Cloud Run用）"""
+    return {"status": "healthy", "service": settings.APP_NAME, "version": "1.0.0"}
+
 @app.get("/", response_class=HTMLResponse)
 async def read_root():
     """Web UIを配信"""
@@ -312,10 +317,12 @@ async def process_send_job(
         logger.error(f"Send job {job_id} failed: {error_msg}")
 
 if __name__ == "__main__":
+    import os
+    port = int(os.environ.get("PORT", settings.PORT))
     uvicorn.run(
         "app.main:app",
         host=settings.HOST,
-        port=settings.PORT,
+        port=port,
         reload=settings.DEBUG,
         log_level=settings.LOG_LEVEL.lower()
     )

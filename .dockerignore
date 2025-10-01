@@ -1,13 +1,62 @@
+# Git
 .git
 .gitignore
-README.md
-.claude_workflow/
-__pycache__/
+.github
+
+# Python cache
+__pycache__
 *.pyc
 *.pyo
 *.pyd
-.env
+.Python
+*.so
+*.egg
+*.egg-info
+dist
+build
+
+# Virtual environments
+env
+venv
 .venv
-venv/
-.DS_Store
+
+# IDE
+.vscode
+.idea
+*.swp
+*.swo
+
+# Testing
+.pytest_cache
+.coverage
+htmlcov
+.tox
+.mypy_cache
+
+# Documentation
+docs
+*.md
+!README.md
+
+# Environment
+.env
+.env.*
+
+# Logs
 *.log
+logs/*.log
+
+# Docker
+Dockerfile
+docker-compose.yml
+.dockerignore
+
+# Cloud
+.gcloudignore
+
+# Claude workflow
+.claude_workflow/
+
+# Development
+*.sqlite
+*.db

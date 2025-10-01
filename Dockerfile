@@ -10,10 +10,16 @@ RUN pip install --no-cache-dir -r requirements.txt
 COPY app/ ./app/
 COPY static/ ./static/
 COPY templates/ ./templates/
-COPY logs/ ./logs/
 
-# ポートを公開
-EXPOSE 8000
+# ログディレクトリを作成（Cloud Run用）
+RUN mkdir -p /app/logs && chmod 755 /app/logs
 
-# アプリケーションを起動
-CMD ["python", "-m", "uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8000"]
+# Cloud Runはポートを環境変数で指定
+EXPOSE 8080
+
+# 非rootユーザーで実行（セキュリティベストプラクティス）
+RUN useradd -m -u 1001 appuser && chown -R appuser:appuser /app
+USER appuser
+
+# アプリケーションを起動（PORT環境変数を使用）
+CMD exec python -m uvicorn app.main:app --host 0.0.0.0 --port ${PORT:-8080}
