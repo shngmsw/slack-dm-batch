@@ -1,7 +1,6 @@
 import re
 import logging
-from typing import List, Dict, Any, Optional
-from string import Template
+from typing import List, Dict, Any
 
 logger = logging.getLogger(__name__)
 
@@ -77,16 +76,22 @@ class MessageProcessor:
             "missing_variables": [],
             "error": None
         }
-        
+
         if not template:
             result["success"] = False
             result["error"] = "Template is empty"
             return result
-        
+
         # 必要な変数を取得
         required_variables = self.extract_variables(template)
+
+        # 変数が1つもない場合はそのまま返す（全員に同じメッセージを送る場合）
+        if not required_variables:
+            result["rendered_message"] = template
+            return result
+
         missing_variables = [var for var in required_variables if var not in variables]
-        
+
         if missing_variables:
             result["missing_variables"] = missing_variables
             # 部分的にレンダリング（利用可能な変数のみ）
@@ -105,7 +110,7 @@ class MessageProcessor:
             except Exception as e:
                 result["success"] = False
                 result["error"] = f"Rendering failed: {str(e)}"
-        
+
         return result
     
     def render_for_users(self, template: str, user_data: Dict[str, Dict[str, Any]]) -> Dict[str, Dict[str, Any]]:

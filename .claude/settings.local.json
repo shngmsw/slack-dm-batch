@@ -10,7 +10,10 @@
       "Bash(rm:*)",
       "Bash(./deploy.sh:*)",
       "Bash(curl:*)",
-      "Bash(bash)"
+      "Bash(bash)",
+      "Bash(python -m pytest tests/test_message_processor.py -v)",
+      "Bash(python3 -m pytest tests/test_message_processor.py -v)",
+      "Bash(python3:*)"
     ],
     "deny": [],
     "ask": []
